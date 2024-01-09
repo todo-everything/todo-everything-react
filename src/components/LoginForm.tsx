@@ -2,12 +2,11 @@ import { LoginCredentialsDTO } from '~/api/auth.ts'
 import { Button, Input } from 'react-daisyui'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useMutation } from '@tanstack/react-query'
-import { loginFn } from '~/lib/auth.ts'
+import AuthApi from '~/lib/auth.ts'
 import { AxiosError } from 'axios'
-import { useUserStore } from '~/stores/user.ts'
+import { useUserStore } from '~/stores/user'
 
-interface LoginFormProps {
-}
+interface LoginFormProps {}
 
 export default function LoginForm(props: LoginFormProps) {
   const {
@@ -19,13 +18,13 @@ export default function LoginForm(props: LoginFormProps) {
   const user = useUserStore((state) => state.user)
 
   const loginMutation = useMutation({
-    mutationFn: loginFn,
+    mutationFn: AuthApi.login,
     onError: (error: AxiosError) => {
       throw new Error(error.response.data)
     },
     onSuccess: (data) => {
-      console.log('finished login', { data})
-    }
+      console.log('finished login', { data })
+    },
   })
 
   const handleSubmit: SubmitHandler<LoginCredentialsDTO> = async (data) => {
@@ -34,9 +33,7 @@ export default function LoginForm(props: LoginFormProps) {
 
   return (
     <form onSubmit={rhfHandleSubmit(handleSubmit)}>
-      <div>
-        {JSON.stringify(user, null, 2)}
-      </div>
+      <div>{JSON.stringify(user, null, 2)}</div>
       <div className="form-control w-full">
         <label htmlFor="" className="label">
           <span className="label-text">Email</span>
@@ -68,7 +65,7 @@ export default function LoginForm(props: LoginFormProps) {
         fullWidth={true}
         className="mt-4"
       >
-        {loginMutation.isPending ? "Working..." : "Login"}
+        {loginMutation.isPending ? 'Working...' : 'Login'}
       </Button>
     </form>
   )

@@ -3,8 +3,9 @@ import {
   fetchUserDetails,
   LoginCredentialsDTO,
   loginWithEmailAndPassword,
+  logout,
 } from '~/api/auth'
-import { AuthUser, TokenResponse, UserResponse } from '~/types'
+import { TokenResponse, UserResponse } from '~/types'
 import { AxiosResponse } from 'axios'
 import memoize from 'memoize'
 import { useUserStore } from '~/stores/user.ts'
@@ -21,6 +22,7 @@ async function handleUserResponse(
   response: AxiosResponse<TokenResponse>,
 ): Promise<AxiosResponse<UserResponse> | void> {
   if (response.status === 200) {
+    console.log('handleUserResponse???')
     const { refresh, access } = response.data
     AuthApi.setToken('refresh', refresh)
     AuthApi.setToken('access', access)
@@ -28,16 +30,6 @@ async function handleUserResponse(
     const updateUser = useUserStore.getState().updateUser
     updateUser(detailsResponse.data)
   }
-}
-
-export async function loginFn(data: LoginCredentialsDTO) {
-  const response = await loginWithEmailAndPassword(data)
-  return handleUserResponse(response)
-}
-
-const getUserFunc = async (): Promise<AxiosResponse<AuthUser>> => {
-  console.log('get user info func (memo)')
-  return axios.get('/account/me/')
 }
 
 const AuthApi = {
@@ -74,12 +66,12 @@ const AuthApi = {
     axios.defaults.headers.common['Authorization'] = null
   },
 
-  logout: async () => {
-    const refreshToken = localStorage.getItem(REFRESH_TOKEN)
-    const res = await axios.post('/token/blacklist/', {
-      refresh: refreshToken,
-    })
+  login: async (data: LoginCredentialsDTO) => {
+    return handleUserResponse(await loginWithEmailAndPassword(data))
+  },
 
+  logout: async () => {
+    await logout()
     // TODO: Check res status code, etc.
 
     ALL_TOKENS.forEach((token) => localStorage.removeItem(token))
@@ -87,7 +79,7 @@ const AuthApi = {
   },
 
   // TODO: Update `memoize` package.
-  getUser: memoize(getUserFunc, { maxAge: 10000 }),
+  getUser: memoize(fetchUserDetails, { maxAge: 10000 }),
 }
 
 export default AuthApi

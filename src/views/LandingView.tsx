@@ -6,8 +6,6 @@ export default function LandingView(props) {
   const navigate = useNavigate()
   const user = useUserStore((state) => state.user)
 
-  const handleLoginClick = () => navigate('/auth/login')
-
   const text = `
         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab aperiam at
         atque, autem corporis dolorum, ipsa labore laudantium maxime modi
@@ -19,11 +17,22 @@ export default function LandingView(props) {
       <h1>Landing page</h1>
       <p>{text}</p>
 
-      {user && (
-        <div>There's a user: {JSON.stringify(user, null, 2)}</div>
-      )}
+      {user && <div>There's a user: {JSON.stringify(user, null, 2)}</div>}
 
-      <Button className="mt-2" type="button" color="primary" onClick={handleLoginClick}>
+      <Button
+        className="mt-2"
+        type="button"
+        color="primary"
+        onClick={() => navigate('/auth/login')}
+      >
+        Login
+      </Button>
+      <Button
+        className="mt-2"
+        type="button"
+        color="primary"
+        onClick={() => navigate('/todos')}
+      >
         Login
       </Button>
     </div>
