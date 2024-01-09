@@ -1,7 +1,6 @@
-import * as React from 'react'
+import React from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { HelmetProvider } from 'react-helmet-async'
-import { BrowserRouter as Router } from 'react-router-dom'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClient } from '~/lib/react-query'
 
@@ -22,10 +21,9 @@ const ErrorFallback = () => {
   )
 }
 
-type AppProviderProps = {
-  children: React.ReactNode
-}
-export const AppProvider = ({ children }: AppProviderProps) => {
+interface AppProviderProps extends React.PropsWithChildren {}
+
+export const AppProvider = (props: AppProviderProps) => {
   return (
     <React.Suspense
       fallback={
@@ -41,7 +39,7 @@ export const AppProvider = ({ children }: AppProviderProps) => {
             {/*{process.env.NODE_ENV !== 'test' && <ReactQueryDevtools />}*/}
             {/*<Notifications />*/}
             {/*<AuthProvider>*/}
-            <Router>{children}</Router>
+            {props.children}
             {/*</AuthProvider>*/}
           </QueryClientProvider>
         </HelmetProvider>

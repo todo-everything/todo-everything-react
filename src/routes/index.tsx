@@ -1,23 +1,50 @@
-import { useRoutes } from 'react-router-dom'
+import { lazy } from 'react'
+import loadable from '@loadable/component'
+import { RouteObject } from 'react-router-dom'
+import RootView from '~/views/RootView.tsx'
 
-import LandingView from '~/views/LandingView'
-import { publicRoutes } from './public'
-import { protectedRoutes } from './protected'
-import { useUserStore } from '~/stores/user.ts'
+const LoadableLandingView = loadable(() => import('~/views/LandingView'))
+const LazyLoginView = lazy(() => import('~/views/LoginView'))
+const LoadableTodoView = loadable(() => import('~/views/TodoView'))
 
-export function AppRoutes() {
-  const user = useUserStore((state) => state.user)
-  console.log('routes user', { user })
-
-  const commonRoutes = [
+export function getRoutes(user) {
+  const authRoutes: RouteObject[] = [
     {
-      path: '/',
-      element: <LandingView />,
+      path: 'todos',
+      element: <LoadableTodoView />,
     },
   ]
 
-  const routes = [...publicRoutes, ...(user ? protectedRoutes : [])]
+  const routes: RouteObject[] = [
+    {
+      path: '/',
+      element: <RootView />,
 
-  const element = useRoutes([...routes, ...commonRoutes])
-  return <>{element}</>
+      children: [
+        {
+          path: 'landing',
+          element: <LoadableLandingView />,
+        },
+        {
+          path: 'login',
+          element: <LazyLoginView />,
+        },
+        ...(user ? authRoutes : []),
+      ],
+    },
+  ]
+
+  return routes
 }
+
+// const routes = [...publicRoutes, ...(user ? protectedRoutes : [])]
+// const element = useRoutes([...commonRoutes])
+
+// return commonRoutes
+// <Routes>
+//   <Route path="/" element={<RootView />}>
+//     <Route path="landing" element={<LandingView />} />
+//     <Route path="login" element={<LoginView />} />
+//   </Route>
+// </Routes>
+// }

@@ -1,8 +1,8 @@
 import { Button } from 'react-daisyui'
 import { useNavigate } from 'react-router-dom'
-import { useUserStore } from '~/stores/user.ts'
+import { useUserStore } from '~/stores/user'
 
-export default function LandingView(props) {
+export default function LandingView() {
   const navigate = useNavigate()
   const user = useUserStore((state) => state.user)
 
@@ -23,7 +23,7 @@ export default function LandingView(props) {
         className="mt-2"
         type="button"
         color="primary"
-        onClick={() => navigate('/auth/login')}
+        onClick={() => navigate('/login')}
       >
         Login
       </Button>

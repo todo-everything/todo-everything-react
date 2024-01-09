@@ -1,12 +1,12 @@
 import { create } from 'zustand'
-import { AuthUser } from '~/types'
+import { IUser } from '~/api/models'
 
 interface UserStore {
-  user: AuthUser | null
-  updateUser: (data: AuthUser) => void
+  user?: IUser
+  updateUser: (data: IUser) => void
 }
 
 export const useUserStore = create<UserStore>((set) => ({
-  user: null,
+  user: undefined,
   updateUser: (user) => set(() => ({ user: user })),
 }))

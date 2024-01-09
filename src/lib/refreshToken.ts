@@ -29,7 +29,7 @@ const refreshTokenFn = async () => {
       AuthApi.clearAllTokens()
     }
 
-    AuthApi.setToken(ACCESS_TOKEN, access)
+    AuthApi.setToken('access', access)
 
     return access
   } catch (error) {

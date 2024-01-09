@@ -1,14 +1,16 @@
+import React, { useEffect } from 'react'
 import { AppProvider } from '~/providers/app'
-import { AppRoutes } from '~/routes'
-import './App.css'
-import { useEffect } from 'react'
 import { useUserStore } from '~/stores/user.ts'
 import AuthApi from '~/lib/auth.ts'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { getRoutes } from '~/routes'
 
 function App() {
   const user = useUserStore((state) => state.user)
   const updateUser = useUserStore((state) => state.updateUser)
   const tokens = AuthApi.getTokens()
+
+  const router = createBrowserRouter(getRoutes(user))
 
   useEffect(() => {
     if (!user && tokens.refresh && tokens.access) {
@@ -23,7 +25,7 @@ function App() {
 
   return (
     <AppProvider>
-      <AppRoutes />
+      <RouterProvider router={router} />
     </AppProvider>
   )
 }

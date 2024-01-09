@@ -1,10 +1,9 @@
 import { lazyImport } from '../utils/lazyImport.ts'
-
-const { AuthRoutes } = lazyImport(() => import('~/routes/auth'), 'AuthRoutes')
+import loadable from '@loadable/component'
 
 export const publicRoutes = [
-  {
-    path: '/auth/*',
-    element: <AuthRoutes />,
-  },
+  // {
+  //   path: '/',
+  //   element: <AuthRoutes />,
+  // },
 ]

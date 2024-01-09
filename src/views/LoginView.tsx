@@ -1,9 +1,6 @@
-import { useState } from 'react'
 import LoginForm from '~/components/LoginForm'
 
-const LoginView = () => {
-  const [data, setData] = useState()
-
+export default function LoginView() {
   return (
     <section className="bg-gray-1 py-20 dark:bg-dark lg:py-[120px]">
       <div className="container mx-auto">
@@ -30,5 +27,3 @@ const LoginView = () => {
     </section>
   )
 }
-
-export default LoginView
