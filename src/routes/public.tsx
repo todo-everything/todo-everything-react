@@ -4,7 +4,7 @@ const { AuthRoutes } = lazyImport(() => import('~/routes/auth'), 'AuthRoutes')
 
 export const publicRoutes = [
   {
-    path: '/login',
+    path: '/auth/*',
     element: <AuthRoutes />,
   },
 ]
