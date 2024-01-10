@@ -1,4 +1,3 @@
-import { Button } from 'react-daisyui'
 import { useNavigate } from 'react-router-dom'
 import { useUserStore } from '~/stores/user'
 
@@ -19,22 +18,22 @@ export default function LandingView() {
 
       {user && <div>There's a user: {JSON.stringify(user, null, 2)}</div>}
 
-      <Button
-        className="mt-2"
+      <button
+        className="btn mt-2"
         type="button"
         color="primary"
         onClick={() => navigate('/login')}
       >
         Login
-      </Button>
-      <Button
-        className="mt-2"
+      </button>
+      <button
+        className="btn mt-2"
         type="button"
         color="primary"
         onClick={() => navigate('/todos')}
       >
         Login
-      </Button>
+      </button>
     </div>
   )
 }

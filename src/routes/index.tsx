@@ -1,11 +1,6 @@
-import { lazy } from 'react'
-import loadable from '@loadable/component'
 import { RouteObject } from 'react-router-dom'
 import RootView from '~/views/RootView.tsx'
-
-const LoadableLandingView = loadable(() => import('~/views/LandingView'))
-const LazyLoginView = lazy(() => import('~/views/LoginView'))
-const LoadableTodoView = loadable(() => import('~/views/TodoView'))
+import { LazyLoginView, LoadableLandingView, LoadableTodoView } from '~/views'
 
 export function getRoutes(user) {
   const authRoutes: RouteObject[] = [

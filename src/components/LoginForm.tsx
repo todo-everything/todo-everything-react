@@ -1,10 +1,8 @@
 import { LoginCredentialsDTO } from '~/api/auth.ts'
-import { Button, Input } from 'react-daisyui'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useMutation } from '@tanstack/react-query'
 import AuthApi from '~/lib/auth.ts'
-import { AxiosError } from 'axios'
-import { useUserStore } from '~/stores/user'
+import { useNavigate } from 'react-router-dom'
 
 interface LoginFormProps {}
 
@@ -12,18 +10,16 @@ export default function LoginForm(props: LoginFormProps) {
   const {
     register,
     handleSubmit: rhfHandleSubmit,
+    reset,
     formState: { errors },
   } = useForm<LoginCredentialsDTO>()
-
-  const user = useUserStore((state) => state.user)
+  const navigate = useNavigate()
 
   const loginMutation = useMutation({
     mutationFn: AuthApi.login,
-    onError: (error: AxiosError) => {
-      throw new Error(error.response.data)
-    },
     onSuccess: (data) => {
-      console.log('finished login', { data })
+      reset()
+      navigate('/todos')
     },
   })
 
@@ -33,12 +29,12 @@ export default function LoginForm(props: LoginFormProps) {
 
   return (
     <form onSubmit={rhfHandleSubmit(handleSubmit)}>
-      <div>{JSON.stringify(user, null, 2)}</div>
       <div className="form-control w-full">
-        <label htmlFor="" className="label">
+        <div className="label">
           <span className="label-text">Email</span>
-        </label>
-        <Input
+        </div>
+        <input
+          className="input input-bordered w-full"
           type="email"
           placeholder="email@example.com"
           {...register('email', { required: true })}
@@ -47,26 +43,25 @@ export default function LoginForm(props: LoginFormProps) {
       </div>
 
       <div className="form-control">
-        <label htmlFor="" className="label">
+        <div className="label">
           <span className="label-text">Password</span>
-        </label>
-        <Input
-          className="input"
+        </div>
+        <input
+          className="input input-bordered w-full"
           type="password"
           {...register('password', { required: true })}
         />
       </div>
 
-      <Button
+      <button
+        className="btn btn-primary w-full mt-4"
         disabled={loginMutation.isPending}
         color="primary"
         type="submit"
         value="Sign In"
-        fullWidth={true}
-        className="mt-4"
       >
         {loginMutation.isPending ? 'Working...' : 'Login'}
-      </Button>
+      </button>
     </form>
   )
 }

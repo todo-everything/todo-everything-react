@@ -14,6 +14,7 @@ function App() {
 
   useEffect(() => {
     if (!user && tokens.refresh && tokens.access) {
+      console.log('refetch user?')
       const refetchUser = async () => {
         const res = await AuthApi.getUser()
         updateUser(res.data)

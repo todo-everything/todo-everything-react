@@ -1,52 +1,73 @@
 import { IUser } from '~/api/models'
 import { PropsWithChildren } from 'react'
-import { Button, Menu, Navbar } from 'react-daisyui'
 import { Link } from 'react-router-dom'
 
 interface HeaderProps extends PropsWithChildren {
   user?: IUser
+  onLogout: () => void
 }
 
 export default function Header(props: HeaderProps) {
   const { user } = props
 
+  const handleLogout = () => {
+    return props.onLogout()
+  }
+
   return (
-    <Navbar>
+    <div className="navbar">
       <div className="flex-1">
-        <Button tag="a" className="text-xl normal-case" color="ghost">
-          TODO: Everything
-        </Button>
+        <a className="btn btn-ghost text-xl normal-case">TODO: Everything</a>
       </div>
       <div className="flex-none">
-        <Menu horizontal={true} className="px-1">
-          <Menu.Item>
+        <ul className="menu menu-horizontal">
+          <li>
             <Link to="/landing">Landing</Link>
-          </Menu.Item>
+          </li>
           {user && (
-            <Menu.Item>
-              <Link to="/todos">Todos</Link>
-            </Menu.Item>
+            <>
+              <li>
+                <Link to="/todos">Todos</Link>
+              </li>
+              <li>{JSON.stringify(user, null, 2)}</li>
+            </>
           )}
-          <Menu.Item>
-            <details>
-              <summary>::</summary>
-              <ul className="p-2 bg-base-100">
-                <li>
-                  <Link to="/login">Login</Link>
-                </li>
-                <li>
-                  <Link to="/register">Register</Link>
-                </li>
-              </ul>
-            </details>
-          </Menu.Item>
-        </Menu>
-        {user && (
-          <div>
-            {user.id} - {user.email}
+        </ul>
+        <div className="dropdown dropdown-end">
+          <div
+            tabIndex={0}
+            role="button"
+            className="btn btn-ghost btn-circle avatar"
+          >
+            <div className="w-10 rounded-full">
+              <img
+                alt="Tailwind CSS Navbar component"
+                src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
+              />
+            </div>
           </div>
-        )}
+          <ul
+            tabIndex={0}
+            className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
+          >
+            <li>
+              <a className="justify-between">
+                Profile
+                <span className="badge">New</span>
+              </a>
+            </li>
+            <li>
+              <Link to="/login">Login</Link>
+            </li>
+            <li>
+              <Link to="/register">Register</Link>
+            </li>
+            <li>
+              <a onClick={handleLogout}>Logout</a>
+            </li>
+          </ul>
+        </div>
       </div>
-    </Navbar>
+    </div>
   )
 }
