@@ -20,11 +20,12 @@ const TOKENS: { [key: string]: string } = {
   refresh: REFRESH_TOKEN,
 }
 
-async function handleUserResponse(
+async function handleTokenResponse(
   response: AxiosResponse<TokenResponse>,
-): Promise<AxiosResponse<UserResponse> | void> {
-  if (response.status === 200) {
-    console.log('handleUserResponse???')
+): Promise<void> {
+  // Do stuff for OK and CREATED responses.
+  // i.e. login + register
+  if ([200, 201].includes(response.status)) {
     const { refresh, access } = response.data
     AuthApi.setToken('refresh', refresh)
     AuthApi.setToken('access', access)
@@ -69,11 +70,11 @@ const AuthApi = {
   },
 
   registerAccount: async (data: RegisterAccountDTO) => {
-    return handleUserResponse(await registerWithEmailAndPassword(data))
+    return handleTokenResponse(await registerWithEmailAndPassword(data))
   },
 
   login: async (data: LoginCredentialsDTO) => {
-    return handleUserResponse(await loginWithEmailAndPassword(data))
+    return handleTokenResponse(await loginWithEmailAndPassword(data))
   },
 
   logout: async () => {

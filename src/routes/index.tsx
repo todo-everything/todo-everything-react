@@ -1,6 +1,11 @@
 import { RouteObject } from 'react-router-dom'
 import RootView from '~/views/RootView.tsx'
-import { LazyLoginView, LoadableLandingView, LoadableTodoView } from '~/views'
+import {
+  LoadableLandingView,
+  LoadableLoginView,
+  LoadableRegisterView,
+  LoadableTodoView,
+} from '~/views'
 
 export function getRoutes(user) {
   const authRoutes: RouteObject[] = [
@@ -22,7 +27,11 @@ export function getRoutes(user) {
         },
         {
           path: 'login',
-          element: <LazyLoginView />,
+          element: <LoadableLoginView />,
+        },
+        {
+          path: 'register',
+          element: <LoadableRegisterView />,
         },
         ...(user ? authRoutes : []),
       ],
