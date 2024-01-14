@@ -1,4 +1,4 @@
-import { axios } from '~/lib/axios'
+import { httpClientPrivate } from '~/lib/httpClientPrivate.ts'
 import { IPartialTodo, ITodo } from './models'
 import { IHttpApi } from '~/api/types'
 
@@ -15,27 +15,27 @@ export interface Todo {
 
 const TodosApi: IHttpApi<ITodo> = {
   fetchAll: async (): Promise<ITodo[]> => {
-    const res = await axios.get('/todo/')
+    const res = await httpClientPrivate.get('/todo/')
     return res?.data
   },
 
   get: async (id: number): Promise<ITodo> => {
-    const res = await axios.get(`/todo/${id}`)
+    const res = await httpClientPrivate.get(`/todo/${id}`)
     return res?.data
   },
 
   create: async (data: Todo): Promise<ITodo> => {
-    const res = await axios.post('/todo/', data)
+    const res = await httpClientPrivate.post('/todo/', data)
     return res?.data
   },
 
   update: async (id: number, updates: IPartialTodo): Promise<ITodo> => {
-    const res = await axios.put(`/todo/${id}/`, updates)
+    const res = await httpClientPrivate.put(`/todo/${id}/`, updates)
     return res?.data
   },
 
   delete: async (id: number) => {
-    const res = await axios.delete(`/todo/${id}/`)
+    const res = await httpClientPrivate.delete(`/todo/${id}/`)
     return res?.data
   },
 }

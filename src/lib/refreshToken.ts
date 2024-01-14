@@ -1,6 +1,6 @@
 import memoize from 'memoize'
-import { axios } from '~/lib/axios'
-import AuthApi, { ACCESS_TOKEN } from '~/lib/auth.ts'
+import AuthApi from '~/lib/auth.ts'
+import { httpClientPublic } from '~/lib/httpClientPublic.ts'
 
 type Response = {
   data: {
@@ -9,15 +9,15 @@ type Response = {
 }
 
 const refreshTokenFn = async () => {
-  console.log('Refreshing token!')
   const { refresh: refreshToken } = AuthApi.getTokens()
 
   if (!refreshToken) {
-    return
+    // No refresh token. Reset local token storage since we're not in a good state.
+    return AuthApi.clearAllTokens()
   }
 
   try {
-    const response = await axios.post('/token/refresh/', {
+    const response = await httpClientPublic.post('/token/refresh/', {
       refresh: refreshToken,
     })
 
@@ -33,6 +33,7 @@ const refreshTokenFn = async () => {
 
     return access
   } catch (error) {
+    console.error('Error refreshing tokens. Clearing all tokens.')
     AuthApi.clearAllTokens()
   }
 }

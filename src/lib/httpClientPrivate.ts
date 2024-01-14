@@ -1,21 +1,21 @@
-import Axios, { AxiosRequestConfig } from 'axios'
+import Axios, { InternalAxiosRequestConfig } from 'axios'
 
 import { API_URL } from '~/config'
 import { memoizedRefreshToken } from '~/lib/refreshToken'
 import AuthApi from '~/lib/auth.ts'
 
-export const axios = Axios.create({
+export const httpClientPrivate = Axios.create({
   baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json',
   },
 })
 
-axios.interceptors.request.use(
-  async (config: AxiosRequestConfig) => {
+httpClientPrivate.interceptors.request.use(
+  async (config: InternalAxiosRequestConfig) => {
     const accessToken = AuthApi.getAccessToken() ?? ''
     if (accessToken) {
-      console.log('adding to thing')
+      console.log('adding to thing', accessToken)
       config.headers['Authorization'] = `Bearer ${accessToken}`
     }
     return config
@@ -23,16 +23,17 @@ axios.interceptors.request.use(
   (error) => Promise.reject(error),
 )
 
-axios.interceptors.response.use(
+httpClientPrivate.interceptors.response.use(
   (response) => response,
   async (error) => {
     const config = error?.config
 
+    console.log('interceptor error', { error, config })
     // TODO: Don't attempt refresh when user was trying to use the token/login URL.
     if (error?.response?.status === 401 && !config?.sent) {
       config.sent = true
       await memoizedRefreshToken()
-      return axios(config)
+      return httpClientPrivate(config)
     }
 
     // TODO: Some sort of notification storage, add error from here

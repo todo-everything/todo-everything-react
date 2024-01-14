@@ -1,14 +1,16 @@
-import { axios } from '~/lib/axios'
+import { httpClientPrivate } from '~/lib/httpClientPrivate'
 import {
   fetchUserDetails,
   LoginCredentialsDTO,
   loginWithEmailAndPassword,
   logout,
+  RegisterAccountDTO,
+  registerWithEmailAndPassword,
 } from '~/api/auth'
 import { TokenResponse, UserResponse } from '~/types'
 import { AxiosResponse } from 'axios'
 import memoize from 'memoize'
-import { useUserStore } from '~/stores/user.ts'
+import { useUserStore } from '~/stores/user'
 
 export const ACCESS_TOKEN = 'access_token'
 export const REFRESH_TOKEN = 'refresh_token'
@@ -63,7 +65,11 @@ const AuthApi = {
 
   clearAllTokens: () => {
     ALL_TOKENS.forEach((token) => localStorage.removeItem(token))
-    axios.defaults.headers.common['Authorization'] = null
+    httpClientPrivate.defaults.headers.common['Authorization'] = null
+  },
+
+  registerAccount: async (data: RegisterAccountDTO) => {
+    return handleUserResponse(await registerWithEmailAndPassword(data))
   },
 
   login: async (data: LoginCredentialsDTO) => {
@@ -75,7 +81,7 @@ const AuthApi = {
     // TODO: Check res status code, etc.
 
     ALL_TOKENS.forEach((token) => localStorage.removeItem(token))
-    axios.defaults.headers.common['Authorization'] = null
+    httpClientPrivate.defaults.headers.common['Authorization'] = null
   },
 
   // TODO: Update `memoize` package.
