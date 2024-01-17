@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { AppProvider } from '~/providers/app'
 import { useUserStore } from '~/stores/user.ts'
 import AuthApi from '~/lib/auth.ts'
@@ -6,6 +6,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { getRoutes } from '~/routes'
 
 function App() {
+  const [appLoading, setAppLoading] = useState<boolean>(false)
   const user = useUserStore((state) => state.user)
   const updateUser = useUserStore((state) => state.updateUser)
   const tokens = AuthApi.getTokens()
@@ -14,10 +15,11 @@ function App() {
 
   useEffect(() => {
     if (!user && tokens.refresh && tokens.access) {
-      console.log('refetch user?')
       const refetchUser = async () => {
+        setAppLoading(true)
         const res = await AuthApi.getUser()
         updateUser(res.data)
+        setAppLoading(false)
       }
 
       refetchUser()
@@ -25,7 +27,7 @@ function App() {
   }, [tokens, user])
 
   return (
-    <AppProvider>
+    <AppProvider isLoading={appLoading}>
       <RouterProvider router={router} />
     </AppProvider>
   )

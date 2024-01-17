@@ -10,9 +10,11 @@ type Response = {
 
 const refreshTokenFn = async () => {
   const { refresh: refreshToken } = AuthApi.getTokens()
+  console.log('refreshing token?', { refreshToken })
 
   if (!refreshToken) {
     // No refresh token. Reset local token storage since we're not in a good state.
+    console.log('no refresh token. clearing all?')
     return AuthApi.clearAllTokens()
   }
 

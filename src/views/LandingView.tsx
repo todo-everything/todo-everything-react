@@ -17,23 +17,6 @@ export default function LandingView() {
       <p>{text}</p>
 
       {user && <div>There's a user: {JSON.stringify(user, null, 2)}</div>}
-
-      <button
-        className="btn mt-2"
-        type="button"
-        color="primary"
-        onClick={() => navigate('/login')}
-      >
-        Login
-      </button>
-      <button
-        className="btn mt-2"
-        type="button"
-        color="primary"
-        onClick={() => navigate('/todos')}
-      >
-        Login
-      </button>
     </div>
   )
 }

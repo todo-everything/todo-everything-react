@@ -1,8 +1,8 @@
-import Header from '~/components/Header'
-import { Suspense } from 'react'
 import { Outlet } from 'react-router-dom'
 import { useUserStore } from '~/stores/user.ts'
 import AuthApi from '~/lib/auth.ts'
+import SideNavigation from '~/components/SideNavigation'
+import MainLayout from '~/components/Layout/MainLayout.tsx'
 
 export default function RootView() {
   const user = useUserStore((state) => state.user)
@@ -14,11 +14,11 @@ export default function RootView() {
   }
 
   return (
-    <div className="container mx-auto">
-      <Header user={user} onLogout={handleLogout} />
-      <Suspense fallback={<div>Loading in root view...</div>}>
+    <div className="flex flex-row">
+      <SideNavigation user={user} onLogout={handleLogout} />
+      <MainLayout className="ml-4">
         <Outlet />
-      </Suspense>
+      </MainLayout>
     </div>
   )
 }

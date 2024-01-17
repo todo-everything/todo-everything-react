@@ -1,24 +1,23 @@
 import { RouteObject } from 'react-router-dom'
-import RootView from '~/views/RootView.tsx'
+import RootView from '~/views/RootView'
 import {
+  LoadableAccountView,
   LoadableLandingView,
   LoadableLoginView,
   LoadableRegisterView,
+  LoadableSettingsView,
   LoadableTodoView,
 } from '~/views'
+import ErrorFallback from '~/components/ErrorFallback.tsx'
 
 export function getRoutes(user) {
-  const authRoutes: RouteObject[] = [
-    {
-      path: 'todos',
-      element: <LoadableTodoView />,
-    },
-  ]
+  const authRoutes: RouteObject[] = []
 
   const routes: RouteObject[] = [
     {
       path: '/',
       element: <RootView />,
+      // errorElement: <ErrorFallback />,
 
       children: [
         {
@@ -33,6 +32,18 @@ export function getRoutes(user) {
           path: 'register',
           element: <LoadableRegisterView />,
         },
+        {
+          path: 'todos',
+          element: <LoadableTodoView />,
+        },
+        {
+          path: 'account',
+          element: <LoadableAccountView />,
+        },
+        {
+          path: 'settings',
+          element: <LoadableSettingsView />,
+        },
         ...(user ? authRoutes : []),
       ],
     },
@@ -40,15 +51,3 @@ export function getRoutes(user) {
 
   return routes
 }
-
-// const routes = [...publicRoutes, ...(user ? protectedRoutes : [])]
-// const element = useRoutes([...commonRoutes])
-
-// return commonRoutes
-// <Routes>
-//   <Route path="/" element={<RootView />}>
-//     <Route path="landing" element={<LandingView />} />
-//     <Route path="login" element={<LoginView />} />
-//   </Route>
-// </Routes>
-// }

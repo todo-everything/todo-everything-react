@@ -7,7 +7,7 @@ import {
   RegisterAccountDTO,
   registerWithEmailAndPassword,
 } from '~/api/auth'
-import { TokenResponse, UserResponse } from '~/types'
+import { TokenResponse } from '~/types'
 import { AxiosResponse } from 'axios'
 import memoize from 'memoize'
 import { useUserStore } from '~/stores/user'

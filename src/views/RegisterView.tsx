@@ -3,8 +3,9 @@ import NewAccountForm from '~/components/NewAccountForm'
 
 export default function RegisterView() {
   return (
-    <section className="bg-gray-1 py-20 dark:bg-dark lg:py-[120px]">
-      <div className="relative mx-auto max-w-[525px] overflow-hidden rounded-lg bg-white px-10 py-16 text-center dark:bg-dark-2 sm:px-12 md:px-[60px]">
+    <div className="mx-auto">
+      {/*<section className="bg-gray-1 py-20 dark:bg-dark lg:py-[120px]">*/}
+      <div className="relative mx-auto max-w-lg overflow-hidden rounded-lg bg-gray-100 px-10 py-16 sm:px-12 md:px-14">
         <NewAccountForm />
         <a
           href="/#"
@@ -19,6 +20,6 @@ export default function RegisterView() {
           </Link>
         </p>
       </div>
-    </section>
+    </div>
   )
 }
