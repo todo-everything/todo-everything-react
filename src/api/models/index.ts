@@ -14,6 +14,7 @@ export interface IUser extends IIdModel {
 export interface ITodo extends IBaseModel {
   title: string
   body: string
+  organization: number
   completed: Date
   created_by: IUser
   // These dates come in as UTC strings and are compatible with the default
@@ -23,12 +24,12 @@ export interface ITodo extends IBaseModel {
   started_on: Date
 }
 
-export interface IPartialTodo {
+export interface IPartialTodo extends Partial<ITodo> {
   title?: string
   body?: string
-  completed?: boolean
-  due_on?: Date | string
-  started_on?: Date | string
+  completed?: Date
+  due_on?: Date
+  started_on?: Date
 }
 
 export interface TodoMap {

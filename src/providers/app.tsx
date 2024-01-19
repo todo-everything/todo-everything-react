@@ -1,6 +1,7 @@
 import { Suspense } from 'react'
-import { HelmetProvider } from 'react-helmet-async'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { QueryClientProvider } from '@tanstack/react-query'
+import { HelmetProvider } from 'react-helmet-async'
 import { queryClient } from '~/lib/react-query'
 import { ErrorBoundary } from 'react-error-boundary'
 import ErrorFallback from '~/components/ErrorFallback.tsx'
@@ -10,7 +11,7 @@ interface AppProviderProps extends React.PropsWithChildren {}
 const Loading = () => (
   <div className="flex items-center justify-center w-screen h-screen">
     {/*<Spinner size="xl" />*/}
-    <p>Loading...</p>
+    <p>Loading... from provider</p>
   </div>
 )
 

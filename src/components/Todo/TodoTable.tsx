@@ -1,12 +1,14 @@
 import cx from 'clsx'
 import { useState } from 'react'
 import { ITodo } from '~/api/models'
+import { useNavigate } from 'react-router-dom'
 
 interface TodoTableProps {
   todos: ITodo[]
 }
 
 export default function TodoTable({ todos = [] }: TodoTableProps) {
+  const navigate = useNavigate()
   const [selection, setSelection] = useState<ITodo[]>([])
   const toggleRow = (id: string) =>
     setSelection((current) =>
@@ -19,10 +21,16 @@ export default function TodoTable({ todos = [] }: TodoTableProps) {
       current.length === todos.length ? [] : todos.map((item) => item.id),
     )
 
+  const handleTodoClick = (todoId: number) => {
+    console.log({ todoId })
+    navigate(`/todos/${todoId}`)
+  }
+
   const rows = todos.map((item) => {
     const selected = selection.includes(item.id)
+    const selectedClassName = cx({ selected: selected })
     return (
-      <tr key={item.id} className={cx({ selected: selected })}>
+      <tr key={item.id} className={`${selectedClassName} hover:bg-base-200`}>
         <td>
           <input
             type="checkbox"
@@ -31,8 +39,12 @@ export default function TodoTable({ todos = [] }: TodoTableProps) {
             onChange={() => toggleRow(item.id)}
           />
         </td>
-        <td>{item.title}</td>
-        <td>{item.completed}</td>
+        <td
+          className="p-4 cursor-pointer"
+          onClick={() => handleTodoClick(item.id)}
+        >
+          {item.title}
+        </td>
       </tr>
     )
   })

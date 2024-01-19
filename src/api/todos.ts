@@ -2,16 +2,7 @@ import { httpClientPrivate } from '~/lib/httpClientPrivate.ts'
 import { IPartialTodo, ITodo } from './models'
 import { IHttpApi } from '~/api/types'
 
-export interface Todo {
-  id?: number
-  title: string
-  body: string
-  completed?: boolean
-  created?: Date
-  modified?: Date
-  due_on?: Date
-  started_on?: Date
-}
+export type TodoDTO = IPartialTodo
 
 const TodosApi: IHttpApi<ITodo> = {
   fetchAll: async (): Promise<ITodo[]> => {
@@ -19,17 +10,17 @@ const TodosApi: IHttpApi<ITodo> = {
     return res?.data
   },
 
-  get: async (id: number): Promise<ITodo> => {
-    const res = await httpClientPrivate.get(`/todo/${id}`)
+  fetchOne: async (id: number): Promise<ITodo> => {
+    const res = await httpClientPrivate.get(`/todo/${id}/`)
     return res?.data
   },
 
-  create: async (data: Todo): Promise<ITodo> => {
+  create: async (data: TodoDTO): Promise<ITodo> => {
     const res = await httpClientPrivate.post('/todo/', data)
     return res?.data
   },
 
-  update: async (id: number, updates: IPartialTodo): Promise<ITodo> => {
+  update: async (id: number, updates: TodoDTO): Promise<ITodo> => {
     const res = await httpClientPrivate.put(`/todo/${id}/`, updates)
     return res?.data
   },

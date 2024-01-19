@@ -11,7 +11,7 @@ import {
 } from 'react-icons/tb'
 import NavbarLink from './NavbarLink.tsx'
 import { IUser } from '~/api/models'
-import { Link, NavLink } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 interface SideNavigationProps {
   user?: IUser
@@ -48,16 +48,12 @@ export default function SideNavigation(props: SideNavigationProps) {
           <ul className="menu">
             {navigationLinks.map((link, index) => (
               <li>
-                <NavLink
+                <NavbarLink
                   {...link}
                   key={link.label}
-                  // className={cx({ active: active })}
                   to={link.to}
                   onClick={() => setActive(index)}
-                >
-                  <link.icon className="w-5 h-5" strokeWidth={1.5} />
-                  {link.label}
-                </NavLink>
+                />
               </li>
             ))}
           </ul>
@@ -74,7 +70,7 @@ export default function SideNavigation(props: SideNavigationProps) {
               </li>
               <li>
                 <NavbarLink
-                  active={false}
+                  isLink={true}
                   icon={TbLogout}
                   label="Logout"
                   to={'/'}

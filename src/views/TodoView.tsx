@@ -5,7 +5,7 @@ export default function TodoView(props) {
   const todos = useTodos()
 
   return (
-    <div className="h-auto w-full flex flex-col mx-auto">
+    <div className="w-full flex flex-col mx-auto mt-4">
       {todos.isLoading ? (
         <div>Loading...</div>
       ) : (

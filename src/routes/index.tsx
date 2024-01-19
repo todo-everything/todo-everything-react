@@ -6,9 +6,10 @@ import {
   LoadableLoginView,
   LoadableRegisterView,
   LoadableSettingsView,
+  LoadableTodoDetailView,
+  LoadableTodoEditView,
   LoadableTodoView,
 } from '~/views'
-import ErrorFallback from '~/components/ErrorFallback.tsx'
 
 export function getRoutes(user) {
   const authRoutes: RouteObject[] = []
@@ -35,6 +36,14 @@ export function getRoutes(user) {
         {
           path: 'todos',
           element: <LoadableTodoView />,
+        },
+        {
+          path: 'todos/:todoId',
+          element: <LoadableTodoDetailView />,
+        },
+        {
+          path: 'todos/:todoId/edit',
+          element: <LoadableTodoEditView />,
         },
         {
           path: 'account',

@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+[contenteditable] {
+    @apply p-4;
+    &:focus {
+        outline: 0 solid transparent;
+    }
+}
