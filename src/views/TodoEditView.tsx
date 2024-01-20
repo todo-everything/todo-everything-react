@@ -3,19 +3,19 @@ import { useDeleteTodo, useSingleTodo, useUpdateTodo } from '~/lib/todos.ts'
 import { useForm } from 'react-hook-form'
 import { type TodoDTO } from '~/api/todos.ts'
 import _ from 'lodash'
-import { TbTrash } from 'react-icons/tb'
 import { useState } from 'react'
 import Modal from '~/components/Modal.tsx'
+import { TbTrash } from 'react-icons/tb'
 
 interface TodoEditViewProps {}
 
 export default function TodoEditView(props: TodoEditViewProps) {
   const navigate = useNavigate()
-  const params = useParams()
-  const todoQuery = useSingleTodo(params.todoId)
+  const { todoId } = useParams()
+  const todoQuery = useSingleTodo(todoId)
   const todo = _.pick(todoQuery.data, ['title', 'body'])
-  const updateTodo = useUpdateTodo(params.todoId)
-  const deleteTodoMutation = useDeleteTodo(Number.parseInt(params.todoId, 10))
+  const updateTodo = useUpdateTodo(todoId)
+  const deleteTodoMutation = useDeleteTodo(Number.parseInt(todoId, 10))
   const [showDeleteModal, setShowDeleteModal] = useState(false)
 
   const {
@@ -34,7 +34,7 @@ export default function TodoEditView(props: TodoEditViewProps) {
   const handleSubmit = async (data) => {
     console.log('handleUpdateClick', {})
     await updateTodo.mutate(data)
-    navigate(`/todos/${params.todoId}`)
+    navigate(`/todos/${todoId}`)
   }
 
   if (todoQuery.isLoading) {
@@ -47,7 +47,7 @@ export default function TodoEditView(props: TodoEditViewProps) {
 
   const handleCancel = (e) => {
     e.preventDefault()
-    navigate(`/todos/${params.todoId}`)
+    navigate(`/todos/${todoId}`)
   }
 
   const handleConfirmDelete = (e) => {
@@ -102,7 +102,7 @@ export default function TodoEditView(props: TodoEditViewProps) {
             type="button"
             onClick={handleConfirmDelete}
           >
-            Delete
+            <TbTrash /> Delete
           </button>
           <div className="join justify-end ml-auto">
             <button
