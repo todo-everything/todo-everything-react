@@ -37,7 +37,7 @@ export default function SideNavigation(props: SideNavigationProps) {
   }
 
   return (
-    <nav className="flex flex-col w-60 h-screen overflow-hidden p-2 bg-neutral-200 border-r border-solid border-base-200">
+    <nav className="flex flex-col w-60 h-screen overflow-hidden bg-neutral-200 border-r border-solid border-base-200">
       <div className="flex flex-col w-full h-full items-center">
         <Link to="/" className="flex flex-row w-full items-center p-2">
           <TbFingerprint className="mr-4" type="mark" size={30} />

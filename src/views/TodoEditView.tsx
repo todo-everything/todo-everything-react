@@ -1,42 +1,22 @@
-import { useParams } from 'react-router-dom'
-import { useSingleTodo, useUpdateTodo } from '~/lib/todos.ts'
-import { useRef } from 'react'
-import {
-  headingsPlugin,
-  listsPlugin,
-  MDXEditor,
-  MDXEditorMethods,
-  quotePlugin,
-  toolbarPlugin,
-  UndoRedo,
-  ListsToggle,
-  CreateLink,
-  BoldItalicUnderlineToggles,
-  BlockTypeSelect,
-} from '@mdxeditor/editor'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useDeleteTodo, useSingleTodo, useUpdateTodo } from '~/lib/todos.ts'
 import { useForm } from 'react-hook-form'
 import { type TodoDTO } from '~/api/todos.ts'
 import _ from 'lodash'
-import '@mdxeditor/editor/style.css'
+import { TbTrash } from 'react-icons/tb'
+import { useState } from 'react'
+import Modal from '~/components/Modal.tsx'
 
 interface TodoEditViewProps {}
 
-const EditorToolbar = () => (
-  <>
-    <UndoRedo />
-    <CreateLink />
-    <BoldItalicUnderlineToggles />
-    <BlockTypeSelect />
-    <ListsToggle />
-  </>
-)
-
 export default function TodoEditView(props: TodoEditViewProps) {
+  const navigate = useNavigate()
   const params = useParams()
   const todoQuery = useSingleTodo(params.todoId)
   const todo = _.pick(todoQuery.data, ['title', 'body'])
-  const editorRef = useRef<MDXEditorMethods>(null)
   const updateTodo = useUpdateTodo(params.todoId)
+  const deleteTodoMutation = useDeleteTodo(Number.parseInt(params.todoId, 10))
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
 
   const {
     register,
@@ -54,6 +34,7 @@ export default function TodoEditView(props: TodoEditViewProps) {
   const handleSubmit = async (data) => {
     console.log('handleUpdateClick', {})
     await updateTodo.mutate(data)
+    navigate(`/todos/${params.todoId}`)
   }
 
   if (todoQuery.isLoading) {
@@ -64,8 +45,33 @@ export default function TodoEditView(props: TodoEditViewProps) {
     return <div>No data?</div>
   }
 
+  const handleCancel = (e) => {
+    e.preventDefault()
+    navigate(`/todos/${params.todoId}`)
+  }
+
+  const handleConfirmDelete = (e) => {
+    e.preventDefault()
+    setShowDeleteModal(true)
+  }
+
+  const handleDelete = async () => {
+    await deleteTodoMutation.mutate()
+    navigate(`/todos/`)
+  }
+
   return (
     <div className="mx-auto w-full">
+      {showDeleteModal && (
+        <Modal
+          showModal={showDeleteModal}
+          title="Delete this todo?"
+          body="Are you sure you want to delete this?"
+          onClose={() => setShowDeleteModal(false)}
+          onConfirm={handleDelete}
+        />
+      )}
+
       <form onSubmit={rhfHandleSubmit(handleSubmit)}>
         <div className="form-control w-full">
           <div className="label">
@@ -84,24 +90,33 @@ export default function TodoEditView(props: TodoEditViewProps) {
           <div className="label">
             <span className="label-text">Body</span>
           </div>
-          <div className="border input-bordered rounded-btn">
-            <MDXEditor
-              className="outline-none prose"
-              ref={editorRef}
-              markdown={todo.body || 'none'}
-              plugins={[
-                toolbarPlugin({ toolbarContents: EditorToolbar }),
-                headingsPlugin(),
-                listsPlugin(),
-                quotePlugin(),
-              ]}
-              onChange={handleBodyChange}
-            />
+          <textarea
+            className="textarea input-bordered rounded-btn"
+            {...register('body', { required: true })}
+          />
+        </div>
+
+        <div className="w-full mt-5 flex flex-row">
+          <button
+            className="btn btn-error"
+            type="button"
+            onClick={handleConfirmDelete}
+          >
+            Delete
+          </button>
+          <div className="join justify-end ml-auto">
+            <button
+              className="join-item btn"
+              type="button"
+              onClick={handleCancel}
+            >
+              Cancel
+            </button>
+            <button className="join-item btn btn-primary" type="submit">
+              Update
+            </button>
           </div>
         </div>
-        <button className="btn btn-primary mt-5" type="submit">
-          Update
-        </button>
       </form>
     </div>
   )

@@ -5,10 +5,10 @@ import { useNavigate } from 'react-router-dom'
 
 interface TodoTableProps {
   todos: ITodo[]
+  onTodoClick: (todoId: number) => void
 }
 
-export default function TodoTable({ todos = [] }: TodoTableProps) {
-  const navigate = useNavigate()
+export default function TodoTable({ todos = [], onTodoClick }: TodoTableProps) {
   const [selection, setSelection] = useState<ITodo[]>([])
   const toggleRow = (id: string) =>
     setSelection((current) =>
@@ -20,11 +20,6 @@ export default function TodoTable({ todos = [] }: TodoTableProps) {
     setSelection((current) =>
       current.length === todos.length ? [] : todos.map((item) => item.id),
     )
-
-  const handleTodoClick = (todoId: number) => {
-    console.log({ todoId })
-    navigate(`/todos/${todoId}`)
-  }
 
   const rows = todos.map((item) => {
     const selected = selection.includes(item.id)
@@ -39,10 +34,7 @@ export default function TodoTable({ todos = [] }: TodoTableProps) {
             onChange={() => toggleRow(item.id)}
           />
         </td>
-        <td
-          className="p-4 cursor-pointer"
-          onClick={() => handleTodoClick(item.id)}
-        >
+        <td className="p-4 cursor-pointer" onClick={() => onTodoClick(item.id)}>
           {item.title}
         </td>
       </tr>

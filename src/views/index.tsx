@@ -6,6 +6,9 @@ export const LoadableRegisterView = loadable(
   () => import('~/views/RegisterView'),
 )
 export const LoadableTodoView = loadable(() => import('~/views/TodoView'))
+export const LoadableTodoRootView = loadable(
+  () => import('~/views/TodoRootView'),
+)
 export const LoadableTodoDetailView = loadable(
   () => import('~/views/TodoDetailView'),
 )

@@ -8,6 +8,7 @@ import {
   LoadableSettingsView,
   LoadableTodoDetailView,
   LoadableTodoEditView,
+  LoadableTodoRootView,
   LoadableTodoView,
 } from '~/views'
 
@@ -35,16 +36,25 @@ export function getRoutes(user) {
         },
         {
           path: 'todos',
-          element: <LoadableTodoView />,
+          element: <LoadableTodoRootView />,
+          children: [
+            {
+              path: '',
+              element: <LoadableTodoView />,
+              children: [
+                {
+                  path: ':todoId',
+                  element: <LoadableTodoDetailView />,
+                },
+                {
+                  path: ':todoId/edit',
+                  element: <LoadableTodoEditView />,
+                },
+              ],
+            },
+          ],
         },
-        {
-          path: 'todos/:todoId',
-          element: <LoadableTodoDetailView />,
-        },
-        {
-          path: 'todos/:todoId/edit',
-          element: <LoadableTodoEditView />,
-        },
+
         {
           path: 'account',
           element: <LoadableAccountView />,

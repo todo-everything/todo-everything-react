@@ -16,7 +16,7 @@ export default function RootView() {
   return (
     <div className="flex flex-row">
       <SideNavigation user={user} onLogout={handleLogout} />
-      <MainLayout className="ml-4 p-4 pr-6">
+      <MainLayout className="ml-4 p-4">
         <Outlet />
       </MainLayout>
     </div>

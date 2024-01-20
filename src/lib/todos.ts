@@ -28,11 +28,24 @@ export const useUpdateTodo = (todoId: number) =>
       queryClient.setQueryData(['todos', todoId], data)
       queryClient.setQueryData(['todos'], (store: ITodo[]) => {
         const keyToUpdate = store.findIndex((todo) => todo.id === data.id)
+        // Update in an immutable way or else it won't update properly.
+        const newStore = [...store]
         if (keyToUpdate > 0) {
-          console.log('update', { store, data })
-          store[keyToUpdate] = data
+          newStore[keyToUpdate] = data
         }
-        return store
+        return newStore
       })
     },
   })
+
+export function useDeleteTodo(todoId: number) {
+  return useMutation({
+    mutationFn: () => TodosApi.delete(todoId),
+    onSuccess: () => {
+      queryClient.removeQueries({ queryKey: ['todos', todoId], exact: true })
+      queryClient.setQueryData(['todos'], (store: ITodo[]) =>
+        store.filter((todo) => todo.id !== todoId),
+      )
+    },
+  })
+}
